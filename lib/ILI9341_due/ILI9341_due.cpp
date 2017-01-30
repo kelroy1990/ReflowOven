@@ -47,7 +47,7 @@ MIT license, all text above must be included in any redistribution.
 
 //#include "..\Streaming\Streaming.h"
 
-#pragma GCC diagnostic push 
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 #pragma GCC diagnostic ignored "-Wswitch"
 
@@ -162,7 +162,7 @@ bool ILI9341_due::begin(void)
 		delay(120);
 		_isInSleep = _isIdle = false;
 
-		
+
 
 		//#ifdef ILI_USE_SPI_TRANSACTION
 		//#if SPI_MODE_NORMAL | SPI_MODE_EXTENDED
@@ -341,7 +341,7 @@ void ILI9341_due::pushColor(uint16_t color)
 //	endTransaction();
 //}
 
-// pushes pixels stored in the colors array (one color is 2 bytes) 
+// pushes pixels stored in the colors array (one color is 2 bytes)
 // in big endian (high byte first)
 // len should be the length of the array (so to push 320 pixels,
 // you have to have a 640-byte array and len should be 640)
@@ -1488,7 +1488,7 @@ uint8_t ILI9341_due::getRotation(void) {
 	return _rotation;
 }
 
-// if true, tft will be blank (white), 
+// if true, tft will be blank (white),
 // display's frame buffer is unaffected
 // (you can write to it without showing content on the screen)
 void ILI9341_due::display(boolean d){
@@ -1594,7 +1594,7 @@ void ILI9341_due::setAngleOffset(int16_t angleOffset)
 //
 //	//digitalWrite(_cs, HIGH);
 //	//*csport |= cspinmask;
-//} 
+//}
 
 void ILI9341_due::printHex8(uint8_t *data, uint8_t length) // prints 8-bit data in hex
 {
@@ -3338,7 +3338,7 @@ uint16_t ILI9341_due::getCharWidth(uint8_t c)
 		width = (pgm_read_byte(_font + GTEXT_FONT_FIXED_WIDTH)) * _textScale;
 	}
 	else{
-		// variable width font 
+		// variable width font
 		uint8_t firstChar = pgm_read_byte(_font + GTEXT_FONT_FIRST_CHAR);
 		uint8_t charCount = pgm_read_byte(_font + GTEXT_FONT_CHAR_COUNT);
 
@@ -3391,4 +3391,4 @@ uint16_t ILI9341_due::getStringWidth(const String &str)
 
 
 
-#pragma GCC diagnostic pop 
+#pragma GCC diagnostic pop

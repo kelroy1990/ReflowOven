@@ -1,150 +1,155 @@
-// URTouch_ButtonTest
-// Copyright (C)2015 Rinky-Dink Electronics, Henning Karlsen. All right reserved
-// web: http://www.RinkyDinkElectronics.com/
-//
-// This program is a quick demo of how create and use buttons.
-//
-// This program requires the UTFT library.
-//
-// It is assumed that the display module is connected to an
-// appropriate shield or that you know how to change the pin
-// numbers in the setup.
-//
+// IMPORTANT: Adafruit_TFTLCD LIBRARY MUST BE SPECIFICALLY
+// CONFIGURED FOR EITHER THE TFT SHIELD OR THE BREAKOUT BOARD.
+// SEE RELEVANT COMMENTS IN Adafruit_TFTLCD.h FOR SETUP.
+//Technical support:goodtft@163.com
 
-#include <Arduino.h>
-#include <URTouch.h>
-#include <Adafruit_GFX.h>
-#include <SPI.h>
-#include <Wire.h>
-#include <Adafruit_ILI9341.h>
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_TFTLCD.h> // Hardware-specific library
 
+// The control pins for the LCD can be assigned to any digital or
+// analog pins...but we'll use the analog pins as this allows us to
+// double up the pins with the touch screen (see the TFT paint example).
+#define LCD_CS       A3 // Chip Select goes to Analog 3
+#define LCD_CD       A2 // Command/Data goes to Analog 2
+#define LCD_WR       A1 // LCD Write goes to Analog 1
+#define LCD_RD       A0 // LCD Read goes to Analog 0
 
-// Initialize display
-// ------------------
-// Set the pins to the correct ones for your development board
-// -----------------------------------------------------------
-// Standard Arduino Uno/2009 Shield            : <display model>,19,18,17,16
-// Standard Arduino Mega/Due shield            : <display model>,38,39,40,41
-// CTE TFT LCD/SD Shield for Arduino Due       : <display model>,25,26,27,28
-// Teensy 3.x TFT Test Board                   : <display model>,23,22, 3, 4
-// ElecHouse TFT LCD/SD Shield for Arduino Due : <display model>,22,23,31,33
-//
-// Remember to change the model parameter to suit your display module!
+#define LCD_RESET    A4 // Can alternately just connect to Arduino's reset pin
 
+// When using the BREAKOUT BOARD only, use these 8 data lines to the LCD:
+// For the Arduino Uno, Duemilanove, Diecimila, etc.:
+//   D0 connects to digital pin 8  (Notice these are
+//   D1 connects to digital pin 9   NOT in order!)
+//   D2 connects to digital pin 2
+//   D3 connects to digital pin 3
+//   D4 connects to digital pin 4
+//   D5 connects to digital pin 5
+//   D6 connects to digital pin 6
+//   D7 connects to digital pin 7
+// For the Arduino Mega, use digital pins 22 through 29
+// (on the 2-row header at the end of the board).
 
-// Initialize touchscreen
-// ----------------------
-// Set the pins to the correct ones for your development board
-// -----------------------------------------------------------
-// Standard Arduino Uno/2009 Shield            : 15,10,14, 9, 8
-// Standard Arduino Mega/Due shield            :  6, 5, 4, 3, 2
-// CTE TFT LCD/SD Shield for Arduino Due       :  6, 5, 4, 3, 2
-// Teensy 3.x TFT Test Board                   : 26,31,27,28,29
-// ElecHouse TFT LCD/SD Shield for Arduino Due : 25,26,27,29,30
-//URTouch::URTouch(byte tclk, byte tcs, byte din, byte dout, byte irq)
-URTouch myTouch(6, 5, 4, 3, 2);
+// Assign human-readable names to some common 16-bit color values:
+#define BLACK      0x0000
+#define BLUE       0x001F
+#define RED        0xF800
+#define GREEN      0x07E0
+#define CYAN       0x07FF
+#define MAGENTA    0xF81F
+#define YELLOW     0xFFE0
+#define WHITE      0xFFFF
 
-// Declare which fonts we will be using
-extern uint8_t BigFont[];
+Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
+// If using the shield, all control and data lines are fixed, and
+// a simpler declaration can optionally be used:
+// Adafruit_TFTLCD tft;
 
-int  x, y;
-char stCurrent[20] = "";
-int  stCurrentLen  = 0;
-char stLast[20]    = "";
-
-
-
-#define TS_MINX     150
-#define TS_MINY     130
-#define TS_MAXX     3800
-#define TS_MAXY     4000
-
-#define STMPE_CS    8
-
-#define TFT_CS      10
-#define TFT_DC      9
-//Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);, 51, 52, 8, 50
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
-
-boolean RecordOn = false;
-
-#define FRAME_X          210
-#define FRAME_Y          180
-#define FRAME_W          100
-#define FRAME_H          50
-
-#define REDBUTTON_X      FRAME_X
-#define REDBUTTON_Y      FRAME_Y
-#define REDBUTTON_W      (FRAME_W / 2)
-#define REDBUTTON_H      FRAME_H
-
-#define GREENBUTTON_X    (REDBUTTON_X + REDBUTTON_W)
-#define GREENBUTTON_Y    FRAME_Y
-#define GREENBUTTON_W    (FRAME_W / 2)
-#define GREENBUTTON_H    FRAME_H
-
-void drawFrame()
+void setup(void)
 {
-   tft.drawRect(FRAME_X, FRAME_Y, FRAME_W, FRAME_H, ILI9341_BLACK);
-}
-
-void redBtn()
-{
-   tft.fillRect(REDBUTTON_X, REDBUTTON_Y, REDBUTTON_W, REDBUTTON_H, ILI9341_RED);
-   tft.fillRect(GREENBUTTON_X, GREENBUTTON_Y, GREENBUTTON_W, GREENBUTTON_H, ILI9341_BLUE);
-   drawFrame();
-   tft.setCursor(GREENBUTTON_X + 6, GREENBUTTON_Y + (GREENBUTTON_H / 2));
-   tft.setTextColor(ILI9341_WHITE);
-   tft.setTextSize(2);
-   tft.println("ON");
-   RecordOn = false;
-}
-
-void greenBtn()
-{
-   tft.fillRect(GREENBUTTON_X, GREENBUTTON_Y, GREENBUTTON_W, GREENBUTTON_H, ILI9341_GREEN);
-   tft.fillRect(REDBUTTON_X, REDBUTTON_Y, REDBUTTON_W, REDBUTTON_H, ILI9341_BLUE);
-   drawFrame();
-   tft.setCursor(REDBUTTON_X + 6, REDBUTTON_Y + (REDBUTTON_H / 2));
-   tft.setTextColor(ILI9341_WHITE);
-   tft.setTextSize(2);
-   tft.println("OFF");
-   RecordOn = true;
-}
-
-void setup()
-{
-// Initial setup
-
    Serial.begin(9600);
-   tft.begin();
+   Serial.println(F("TFT LCD test"));
 
+#ifdef USE_ADAFRUIT_SHIELD_PINOUT
+   Serial.println(F("Using Adafruit 2.4\" TFT Arduino Shield Pinout"));
+#else
+   Serial.println(F("Using Adafruit 2.4\" TFT Breakout Board Pinout"));
+#endif
 
-   tft.fillScreen(ILI9341_BLUE);
-// origin = left,top landscape (USB left upper)
-   tft.setRotation(1);
-   redBtn();
+   Serial.print("TFT size is ");
+   Serial.print(tft.width());
+   Serial.print("x");
+   Serial.println(tft.height());
 
-   delay(100);
-   myTouch.InitTouch();
-   myTouch.setPrecision(PREC_MEDIUM);
+   tft.reset();
 
-
-
-   Serial.println("Start--");
+   uint16_t identifier = tft.readID();
+   if(identifier == 0x9325){
+      Serial.println(F("Found ILI9325 LCD driver"));
+      }
+   else if(identifier == 0x9328){
+           Serial.println(F("Found ILI9328 LCD driver"));
+           }
+   else if(identifier == 0x4535){
+           Serial.println(F("Found LGDP4535 LCD driver"));
+           }
+   else if(identifier == 0x7575){
+           Serial.println(F("Found HX8347G LCD driver"));
+           }
+   else if(identifier == 0x9341){
+           Serial.println(F("Found ILI9341 LCD driver"));
+           }
+   else if(identifier == 0x8357){
+           Serial.println(F("Found HX8357D LCD driver"));
+           } /* else if(identifier==0x0101)
+              * {
+              * identifier=0x9341;
+              *  Serial.println(F("Found 0x9341 LCD driver"));
+              * }*/
+   else{
+       Serial.print(F("Unknown LCD driver chip: "));
+       Serial.println(identifier, HEX);
+       }
+   identifier = 0x9328;
+   tft.begin(identifier);
 }
 
-void loop()
+void loop(void)
 {
-   //Serial.print("#!");
-   if(myTouch.dataAvailable()){
-      Serial.println("avaliable");
-      myTouch.read();
-      x = myTouch.getX();
-      y = myTouch.getY();
-      Serial.print("Valor x ");
-      Serial.println(x);
-      Serial.print("Valor y ");
-      Serial.println(y);
-      }
+   tft.fillScreen(BLACK);
+   unsigned long start = micros();
+   tft.setCursor(0, 0);
+
+   tft.setTextColor(RED);
+   tft.setTextSize(1);
+   tft.println("Hello World!");
+   tft.println(01234.56789);
+   tft.println(0xDEADBEEF, HEX);
+   tft.println();
+   tft.println();
+   tft.setTextColor(GREEN);
+   tft.setTextSize(2);
+   tft.println("Hello World!");
+   tft.println(01234.56789);
+   tft.println(0xDEADBEEF, HEX);
+   tft.println();
+   tft.println();
+
+   tft.setTextColor(BLUE);
+   tft.setTextSize(3);
+   tft.println("Hello World!");
+   tft.println(01234.56789);
+   tft.println(0xDEADBEEF, HEX);
+
+   tft.setTextColor(WHITE);
+   tft.setTextSize(4);
+   tft.println("Hello!");
+   tft.setTextColor(YELLOW);
+   tft.setTextSize(5);
+   tft.println("Hello!");
+   tft.setTextColor(RED);
+   tft.setTextSize(6);
+   tft.println("Hello!");
+   tft.println();
+   tft.println();
+
+   /*
+    * tft.println();
+    * tft.setTextColor(GREEN);
+    * tft.setTextSize(5);
+    * tft.println("Groop");
+    * tft.setTextSize(2);
+    * tft.println("I implore thee,");
+    * tft.setTextSize(1);
+    * tft.println("my foonting turlingdromes.");
+    * tft.println("And hooptiously drangle me");
+    * tft.println("with crinkly bindlewurdles,");
+    * tft.println("Or I will rend thee");
+    * tft.println("in the gobberwarts");
+    * tft.println("with my blurglecruncheon,");
+    * tft.println("see if I don't!");*/
+   delay(1000);
+   delay(1000);
+   delay(1000);
+   delay(1000);
+   delay(1000);
 }

@@ -20,7 +20,7 @@
 #if defined ARDUINO_SAM_DUE
 #define ILI9341_SPI_CLKDIVIDER    2              // for Due
 #elif defined ARDUINO_ARCH_AVR
-#define ILI9341_SPI_CLKDIVIDER    SPI_CLOCK_DIV4 // for Uno, Mega,...
+#define ILI9341_SPI_CLKDIVIDER    SPI_CLOCK_DIV2 // for Uno, Mega,...
 #endif
 
 // uncomment if you want to use SPI transactions. Uncomment it if the library does not work when used with other libraries.
