@@ -25,3 +25,5 @@ XPT2046_TouchScree: Librería de este integrado que es el táctil.
 En este momento estoy utilizando una pantalla con el ILI 9328, el cual funciona en arduino mega, pero desconozco si funciona en arduino DUE. Que es el objetivo dle proyecto.
 
 De momento se trabaja sobre arduino Mega y luego se traslada.
+
+http://www.ebay.com/itm/3-2-inch-16-9-wide-TFT-LCD-module-w-Font-IC-400x240-arduino-DUE-MEGA-2-8-4-3-/111114349519?hash=item19deee6bcf
