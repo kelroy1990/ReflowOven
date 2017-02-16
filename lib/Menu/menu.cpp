@@ -7,15 +7,13 @@
 #include "roboto16.h"
 #include "roboto32.h"
 #include "Alert.h"
+#include <touchcalibration.h>
 //#include "roboto70.h"
 
-// CS and DC for the LCD
-#define LCD_CS     10   // Chip Select for LCD
-#define LCD_DC     9    // Command/Data for LCD
-#define LCD_RST    8    // Command/Data for LCD
 
 
-ILI9341_due tft(LCD_CS, LCD_DC, LCD_RST);
+ILI9341_due      tft(LCD_CS, LCD_DC, LCD_RST);
+TouchCalibration _CalTouch(&tft); //le mandamos la dirección del objeto tft para que pueda indexarlo.
 
 
 #if defined(ARDUINO_ARCH_AVR)
@@ -72,13 +70,14 @@ void Menu::PrintStartMenu()
 void Menu::StartScreen()
 {
    tft.begin();
+   //_CalTouch.SetUpScreenObject(&tft);
    tft.setRotation(iliRotation270);            // landscape
 
    tft.fillScreen(ILI9341_BLACK);
 
    // tft.drawBitmap(arduLogo, 160, 100, 40, 32, ILI9341_DARKCYAN);       // "transparent" background
    //tft.drawBitmap(arduLogo, 110, 100, 40, 32, ILI9341_WHITE, ILI9341_DARKCYAN);
-   delay(500);
+   //delay(500);
    screenLoading();
 }
 
@@ -112,6 +111,9 @@ void Menu::screenLoading()
  *     tft.fillArc(x, y, 20, 3, 1440 - i + 45, 1440 - i + 45 + 4, colorLightGray);
  *     }
  */
+
+   delay(1000);
+   //vamos testear el touch.
 }
 
 void Menu::drawButtons()

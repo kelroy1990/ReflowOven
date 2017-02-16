@@ -5,25 +5,35 @@
  * a full color image.
  */
 #include <Arduino.h>
+
+//Librerias externas
+#include <TouchScreen.h>
+#include <touchcalibration.h>
+#include <stdint.h>
+#include <SdFat.h>
 #include "SPI.h"
 #include "ILI9341_due_config.h"
 #include "ILI9341_due.h"
 #include <SystemFont5x7.h>
-#include "menu.h"
 #include <Arial_bold_14.h>
-#include <Settings.h>
 #include <Alert.h>
 
-Menu _menu;
+//librerias propias
+#include <Pantalla.h>
+#include <Settings.h>
+//#include <menu.h>
 
+Pantalla Screen;
 void setup()
 {
    // #ifdef _Serial
-   Serial.begin(9600);
+   Serial.begin(115200);
    Serial.println("Iniciando programa Reflow Oven...");
    //#endif
-   _menu.StartScreen();
-   // _menu.PrintStartMenu();
+   Screen.StartScreen();
+   Screen.StartSD();
+   Screen.InitialMenu();
+   //_menu.PrintStartMenu();
 }
 
 void loop()
