@@ -66,6 +66,39 @@ void Pantalla::InitialMenu()
    tft.printAt("Start", 208, 120);
 }
 
+void Pantalla::Menu()
+{
+   //LA PANTALLA ES DE 320x240 px
+   //Aquí vamos a hacer el menu que sería como sigue
+   //Setup-Test-Perfiles-Punto Manual-Reflow-Info
+   //-------------------------------------------
+   //->Variables Hay sD?, Hay sensores?, cuantos, TIpo sensor..
+   //Perfil en uso
+   //Hora Fecha----------------------------------- Consumo actual
+   //--------------------------------------------- Version
+
+   Serial.println("Print start menu");
+   //gtextArea x,y, W,H---> Cordenadas x y donde empieza, W ancho H alto de la pantalla.
+   gTextArea titleArea {
+      0, 0, 320, 30
+   };                                     // define a 300px wide and 40px high title area
+   gTextArea descriptionArea {
+      0, 40, 320, 210
+   };                                         // define a 300px wide and 170px high description area
+
+
+   tft.setFont(Arial_bold_14);
+   tft.setTextColor(ILI9341_WHITE, ILI9341_DARKBLUE);
+
+   tft.setTextArea(titleArea);
+   tft.clearTextArea(ILI9341_LIGHTBLUE); // just to see where the area is
+   tft.println("Setup | Test | Profiles | Manual Set ");
+   tft.print("Reflow | Info");
+   tft.setTextArea(descriptionArea);
+   tft.clearTextArea(ILI9341_LIGHTBLUE);
+   tft.print("Pantalla donde mostramos.");
+}
+
 void Pantalla::StartScreen()
 {
    tft.begin();
@@ -81,6 +114,15 @@ void Pantalla::StartScreen()
 
 void Pantalla::StartSD()
 {
+   //En esta parte vamos a cargar la sd y a la vez cuentear el número de encendidos, así como controlar la versión del firmware y variables de inicio....
+
+   /*
+    * Estructura del archivo Version
+    * KP
+    * KI
+    * KD
+    */
+
    pinMode(SD_Detect, INPUT_PULLUP); //Ponemos el pin como INPUT_PULLUP para saber si tenemos una tarjeta, pues cuando no tiene está en modo flotante.
    //Un 1(true) significa que tenemos tarjeta sd- un 0(false) significa que no tenemos tarjeta.
    if(!digitalRead(SD_Detect)){      //si no hay tarjeta salimos.
@@ -89,4 +131,42 @@ void Pantalla::StartSD()
       }
    SD_state = true;
    //iniciamos la tarjeta con el pin CS.
+   if(!sd.begin(SD_CS)){
+      //Documento esto pues da muchos errores el initErrorHalt mejor poner un return,
+      return;
+      //  sd.initErrorHalt();
+      }
+
+
+
+// open the file for write at end like the Native SD library
+   if(!myFile.open("test.txt", O_RDWR | O_CREAT | O_AT_END)){
+      sd.errorHalt("opening test.txt for write failed");
+      }
+// if the file opened okay, write to it:
+   Serial.print("Writing to test.txt...");
+   //forma de imprimir con myFile.
+   myFile.println("testing 1, 2, 3.");
+
+// close the file:
+   myFile.close();
+   Serial.println("done.");
+
+// re-open the file for reading:
+   if(!myFile.open("test.txt", O_READ)){
+      sd.errorHalt("opening test.txt for read failed");
+      }
+   Serial.println("test.txt:");
+
+// read from the file until there's nothing else in it:
+   int data;
+   while((data = myFile.read()) >= 0){
+         Serial.write(data);
+         }
+// close the file:
+   myFile.close();
+
+   // Initialize SdFat or print a detailed error message and halt
+// Use half speed like the native library.
+// change to SPI_FULL_SPEED for more performance.
 }

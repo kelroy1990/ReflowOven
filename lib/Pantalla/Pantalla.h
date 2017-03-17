@@ -7,6 +7,7 @@
 #include <Settings.h>
 #include <SdFat.h>
 #include <ILI9341_due_config.h>
+#include <touchcalibration.h>
 
 
 //Settings
@@ -24,6 +25,7 @@ public:
    void InitialMenu();
    void StartScreen();
    void StartSD();
+   void Menu();
 
 
 private:
@@ -34,14 +36,16 @@ private:
 
 protected:
    //Constructores que tiene la pantalla.
-   TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
-   TSPoint     p;
-   ILI9341_due tft = ILI9341_due(LCD_CS, LCD_DC, LCD_RST);
-   SdFat       sd;
-   SdFile      myFile;
-   uint16_t    colorLightGray = tft.color565(192, 192, 192);
-   uint16_t    colorGray      = tft.color565(127, 127, 127);
-   uint16_t    colorDarkGray  = tft.color565(64, 64, 64);
+   TouchScreen      ts = TouchScreen(XP, YP, XM, YM, 300);
+   TSPoint          p;
+   ILI9341_due      tft = ILI9341_due(LCD_CS, LCD_DC, LCD_RST);
+   SdFat            sd;
+   SdFile           myFile;
+   TouchCalibration CalibrateTouch = TouchCalibration(&tft);
+
+   uint16_t colorLightGray = tft.color565(192, 192, 192);
+   uint16_t colorGray      = tft.color565(127, 127, 127);
+   uint16_t colorDarkGray  = tft.color565(64, 64, 64);
 };
 
 #endif
