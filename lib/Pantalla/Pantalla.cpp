@@ -12,6 +12,11 @@ Pantalla::Pantalla()
    //Constructor
 }
 
+void Pantalla::ClearScreen(uint16_t Color){
+  //limpieza de pantalla para salto al siguiente menu.
+  tft.fillScreen(Color);
+}
+
 void Pantalla::InitialMenu()
 {
    //   const uint16_t x = 159;
@@ -68,6 +73,7 @@ void Pantalla::InitialMenu()
 
 void Pantalla::Menu()
 {
+  ClearScreen(ILI9341_WHITE);
    //LA PANTALLA ES DE 320x240 px
    //Aquí vamos a hacer el menu que sería como sigue
    //Setup-Test-Perfiles-Punto Manual-Reflow-Info
@@ -80,10 +86,10 @@ void Pantalla::Menu()
    Serial.println("Print start menu");
    //gtextArea x,y, W,H---> Cordenadas x y donde empieza, W ancho H alto de la pantalla.
    gTextArea titleArea {
-      0, 0, 320, 30
+      0, 0, 320, 20
    };                                     // define a 300px wide and 40px high title area
    gTextArea descriptionArea {
-      0, 40, 320, 210
+      0, 20, 320, 220
    };                                         // define a 300px wide and 170px high description area
 
 
@@ -91,16 +97,26 @@ void Pantalla::Menu()
    tft.setTextColor(ILI9341_WHITE, ILI9341_DARKBLUE);
 
    tft.setTextArea(titleArea);
-   tft.clearTextArea(ILI9341_LIGHTBLUE); // just to see where the area is
-   tft.println("Setup | Test | Profiles | Manual Set ");
-   tft.print("Reflow | Info");
+   tft.clearTextArea(ILI9341_BLACK); // just to see where the area is
+
+    //  void printAlignedOffseted(const char *str, gTextAlign align, uint16_t offsetX, uint16_t offsetY, gTextEraseLine eraseLine);
+    //  tft.printAlignedOffseted("HOME | PROFILES | REFLOW | MANUAL ", gTextAlignTopCenter,0,5,gTextEraseFullLine);
+   tft.printAligned("HOME | PROFILES | REFLOW | MANUAL ", gTextAlignTopCenter,gTextEraseFullLine);
+    //  tft.println("HOME | PROFILES | REFLOW | MANUAL ");
+    //  tft.print("Reflow | Info");
+
+
+    //Parte inferior
    tft.setTextArea(descriptionArea);
    tft.clearTextArea(ILI9341_LIGHTBLUE);
-   tft.print("Pantalla donde mostramos.");
+    tft.printAlignedOffseted(("V" + (String)Version), gTextAlignBottomLeft, 0, 0);
+
+
 }
 
 void Pantalla::StartScreen()
 {
+
    tft.begin();
    //_CalTouch.SetUpScreenObject(&tft);
    tft.setRotation(iliRotation270);            // landscape
@@ -139,34 +155,34 @@ void Pantalla::StartSD()
 
 
 
-// open the file for write at end like the Native SD library
+  // open the file for write at end like the Native SD library
    if(!myFile.open("test.txt", O_RDWR | O_CREAT | O_AT_END)){
       sd.errorHalt("opening test.txt for write failed");
       }
-// if the file opened okay, write to it:
+  // if the file opened okay, write to it:
    Serial.print("Writing to test.txt...");
    //forma de imprimir con myFile.
    myFile.println("testing 1, 2, 3.");
 
-// close the file:
+  // close the file:
    myFile.close();
    Serial.println("done.");
 
-// re-open the file for reading:
+  // re-open the file for reading:
    if(!myFile.open("test.txt", O_READ)){
       sd.errorHalt("opening test.txt for read failed");
       }
    Serial.println("test.txt:");
 
-// read from the file until there's nothing else in it:
+  // read from the file until there's nothing else in it:
    int data;
    while((data = myFile.read()) >= 0){
          Serial.write(data);
          }
-// close the file:
+  // close the file:
    myFile.close();
 
    // Initialize SdFat or print a detailed error message and halt
-// Use half speed like the native library.
-// change to SPI_FULL_SPEED for more performance.
+  // Use half speed like the native library.
+  // change to SPI_FULL_SPEED for more performance.
 }
