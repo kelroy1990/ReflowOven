@@ -30,10 +30,11 @@ void setup()
    Serial.begin(115200);
    Serial.println("Iniciando programa Reflow Oven...");
    //#endif
-   Screen.StartSD();    //carga la SD.
+   //Screen.StartSD();    //carga la SD.
    Screen.StartScreen();
    Screen.InitialMenu();
-   //_menu.PrintStartMenu();
+   delay(1000);
+   Screen.Menu();
 }
 
 void loop()

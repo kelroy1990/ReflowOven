@@ -28,10 +28,11 @@ public:
    void Menu();
 
 
+
 private:
 
    bool SD_state = false;
-
+   void ClearScreen(uint16_t Color);
 
 
 protected:

@@ -1,7 +1,7 @@
 //Definiciones para los distintos protocolos
 
 #define _Serial
-#define Version      1.0
+#define Version      1.00
 #define Autor        (String)"Kelroy"
 #define Email        (String)"karlicio@gmail.com"
 // CS and DC for the LCD
