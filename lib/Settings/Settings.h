@@ -16,3 +16,6 @@
 //pin para SD
 #define SD_CS        22
 #define SD_Detect    23
+   //LA PANTALLA ES DE 320x240 px
+#define WithScreen 320
+#define HeighScreen 240

@@ -8,6 +8,7 @@
 #include <SdFat.h>
 #include <ILI9341_due_config.h>
 #include <touchcalibration.h>
+#include <Utilities.h>
 
 
 //Settings
@@ -43,6 +44,9 @@ protected:
    SdFat            sd;
    SdFile           myFile;
    TouchCalibration CalibrateTouch = TouchCalibration(&tft);
+
+   //Utilidades y funciones
+   Utilities _Utilities;
 
    uint16_t colorLightGray = tft.color565(192, 192, 192);
    uint16_t colorGray      = tft.color565(127, 127, 127);

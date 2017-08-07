@@ -4,12 +4,13 @@
 #include <Arial_bold_14.h>
 #include <roboto16.h>
 #include <roboto32.h>
-
+#include <Utilities.h>
 
 
 Pantalla::Pantalla()
 {
-   //Constructor
+   //Constructor, paso objetos de construccion a Utilities
+
 }
 
 void Pantalla::ClearScreen(uint16_t Color){
@@ -112,6 +113,8 @@ void Pantalla::Menu()
     tft.printAlignedOffseted(("V" + (String)Version), gTextAlignBottomLeft, 0, 0);
 
 
+    _Utilities.PrintGrid(0, 20, 320, 240, 20);
+
 }
 
 void Pantalla::StartScreen()
@@ -123,9 +126,9 @@ void Pantalla::StartScreen()
 
    tft.fillScreen(ILI9341_BLACK);
 
-   // tft.drawBitmap(arduLogo, 160, 100, 40, 32, ILI9341_DARKCYAN);       // "transparent" background
-   //tft.drawBitmap(arduLogo, 110, 100, 40, 32, ILI9341_WHITE, ILI9341_DARKCYAN);
-   //delay(500);
+   //Inicio la librería de utilidades y funciones pasandole el objeto pantalla
+
+   _Utilities.SetScreenObject(&tft);
 }
 
 void Pantalla::StartSD()
