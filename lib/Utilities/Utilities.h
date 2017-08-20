@@ -21,7 +21,7 @@ class Utilities {
 public:
    Utilities();
    void SetScreenObject(ILI9341_due *IliObject);
-   void PrintGrid(int StartX, int StartY, int FinishX, int FinishY, int Escale);
+   void PrintGrid(int StartX, int StartY, int FinishX, int FinishY, int Escale, String Xlabel, String Ylabel);
 
 
 

@@ -18,4 +18,4 @@
 #define SD_Detect    23
    //LA PANTALLA ES DE 320x240 px
 #define WithScreen 320
-#define HeighScreen 240
+#define HeigthScreen 240

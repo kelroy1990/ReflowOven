@@ -113,7 +113,7 @@ void Pantalla::Menu()
     tft.printAlignedOffseted(("V" + (String)Version), gTextAlignBottomLeft, 0, 0);
 
 
-    _Utilities.PrintGrid(0, 20, 320, 240, 20);
+    _Utilities.PrintGrid(0, 20, 320, 240, 20,"Segundos","Grados");
 
 }
 
