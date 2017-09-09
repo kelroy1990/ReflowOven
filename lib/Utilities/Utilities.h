@@ -24,7 +24,6 @@ public:
    void PrintGrid(int StartX, int StartY, int FinishX, int FinishY, int Escale, String Xlabel, String Ylabel);
 
 
-
 private:
 
    bool SD_state = false;
@@ -32,7 +31,9 @@ private:
 
    //Constructores que tiene la pantalla, recogemos con puntero.
    ILI9341_due      *_tft;
-
+   gTextArea _GridArea {30,20,WideScreen,HeigthScreen-50}; //Area del grid
+   gTextArea _Xlabel {0,HeigthScreen-30,WideScreen,HeigthScreen};//Area del texto inferior
+   gTextArea _Ylabel {0,20,30,HeigthScreen};//Area del texto Y
 
 protected:
 

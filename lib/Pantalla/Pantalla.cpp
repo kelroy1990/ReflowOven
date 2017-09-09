@@ -18,6 +18,7 @@ Pantalla::Pantalla()
 
 void Pantalla::InterrupcionBoton()
 {
+  Serial.println("Boton pulsado");
   _Encoder.SetSwitchStop();
 }
 
@@ -52,28 +53,7 @@ void Pantalla::InitialMenu()
 
    tft.setFont(Arial_bold_14);
    tft.setTextColor(ILI9341_WHITE, ILI9341_BLUE);
-   // Draw the upper row of buttons
 
-   /*
-    * for(x = 0; x < 5; x++){
-    *  tft.fillRoundRect(10 + (x * 60), 10, 50, 50, 5, ILI9341_BLUE);
-    *  tft.drawRoundRect(10 + (x * 60), 10, 50, 50, 5, ILI9341_WHITE);
-    *  itoa(x + 1, strBuff, 10);
-    *  Serial.println(strBuff);
-    *  tft.printAt(strBuff, 32 + (x * 60), 30);
-    *  }
-    * // Draw the center row of buttons
-    * for(x = 0; x < 5; x++){
-    *  tft.fillRoundRect(10 + (x * 60), 70, 50, 50, 5, ILI9341_BLUE);
-    *  tft.drawRoundRect(10 + (x * 60), 70, 50, 50, 5, ILI9341_WHITE);
-    *  if(x < 4){
-    *     itoa(x + 6, strBuff, 10);
-    *     tft.printAt(strBuff, 32 + (x * 60), 90);
-    *     }
-    *  }
-    */
-   //tft.printAt("0", 270, 90);
-   // Draw the lower row of buttons
 
 
    tft.fillRoundRect(10, 100, 140, 50, 5, ILI9341_BLUE);
@@ -83,6 +63,43 @@ void Pantalla::InitialMenu()
    tft.drawRoundRect(160, 100, 140, 50, 5, ILI9341_WHITE);
    tft.printAt("Start", 208, 120);
 }
+
+int Pantalla::UpdateState(int _StateNow){
+  p = ts.getPoint();
+
+ // we have some minimum pressure we consider 'valid'
+ // pressure of 0 means no pressing!
+ if(_StateNow==0){
+
+   if (p.z > ts.pressureThreshhold) {
+
+     Serial.print("X = "); Serial.print(p.x);
+     Serial.print("\tY = "); Serial.print(p.y);
+     Serial.println("");
+     //Boton touch calibrate (10,100)->ancho 140 alto 50
+      if(p.x >= 10 && p.x<=150){
+        if(p.y >= 100 && p.y <=150){
+          Serial.println("Pulsado touch screen");
+        }
+      } //Fin caso touch calibrate button
+
+      //Boton touch calibrate (160,100)->ancho 140 alto 50
+       if(p.x >= 160 && p.x<=300){
+         if(p.y >= 100 && p.y <=150){
+           Serial.println("Pulsado Start");
+         }
+       } //Fin caso touch calibrate button
+
+
+
+
+
+   }
+
+ }
+
+ }
+
 
 void Pantalla::Menu()
 {

@@ -22,105 +22,103 @@ _tft=IliObject;
 
 
 //TODO Corregir el grid pues sale siempre cortado.
-void Utilities::PrintGrid(int StartX, int StartY, int FinishX, int FinishY, int Escale, String Xlabel,String Ylabel){
+void Utilities::PrintGrid(int StartX, int StartY, int FinishX, int FinishY, int Escale, String Xlabel,String Ylabel)
+{
    //LA PANTALLA ES DE 320x240 px
   _tft->fillRect(StartX, StartY, WideScreen, (FinishY-StartY), ILI9341_BLACK);
   //Variables
 
 
-//voy haacer un grid de 10x10, con un offset inicial de 30 y final de 30.
-
-gTextArea _GridArea {30,20,WideScreen,HeigthScreen-30}; //Area del grid
-gTextArea _Xlabel {0,HeigthScreen-30,WideScreen,HeigthScreen};//Area del texto inferior
-gTextArea _Ylabel {0,20,30,HeigthScreen};//Area del texto Y
-
-_tft->setTextArea(_GridArea);
-_tft->clearTextArea(ILI9341_BLACK);
-
-_tft->setTextArea(_Xlabel);
-_tft->clearTextArea(ILI9341_BLACK);
-
-_tft->setTextArea(_Ylabel);
-_tft->clearTextArea(ILI9341_BROWN);
-
-//Ahora tengo lo siguient
-/*
-
-Cuadrado desde (30,20)->(320,210), que es el del grid
-
-            En X total de 290 pixeles
-            En Y total de 190 pixeles
-
-Cuadrado desde (0,210)->(320,240), que es el del x label
-
-            En X total de 320 pixeles
-            En Y total de 30 pixeles
-
-Cuadrado desde (0,20)->(30,240), que es el del y label
-
-            En Y total de 30 pixeles
-            En X total de 220 pixeles
-
-  *///
-
-//Como el último pixel no lo dibuja hacemos un grid de 5 de desplazamiento.
+  //voy haacer un grid de 10x10, con un offset inicial de 30 y final de 30.
 
 
 
-for(int h=35;h<=WideScreen-5;h++){
-  if(((h-5)%10)==0){
-    _tft->drawFastVLine(h, 20, HeigthScreen-30-20, ILI9341_GREEN); //x,y,h,color
-    Serial.print("#");
-    Serial.println(h);
-}
-Serial.println(h);
+  _tft->setTextArea(_GridArea);
+  _tft->clearTextArea(ILI9341_BLACK);
 
-}
+  _tft->setTextArea(_Xlabel);
+  _tft->clearTextArea(ILI9341_BLACK);
 
+  _tft->setTextArea(_Ylabel);
+  _tft->clearTextArea(ILI9341_BLACK);
 
-for(int h=20;h<=HeigthScreen-30;h++){
-  if(((h-0)%10)==0)_tft->drawFastHLine(35, h, WideScreen-40, ILI9341_GREEN);
-    // Serial.println(h);
-}
+  //Ahora tengo lo siguient
+  /*
 
+  Cuadrado desde (30,20)->(320,210), que es el del grid
 
-  //   int _YOffset =30;
-  //   int _XOffset =30;
-  //
-  //
-  // //label x and y
-  //
-  // gTextArea _Xlabel{ 0, FinishY-_YOffset, WithScreen, _YOffset }; // define a 300px wide and 170px high description area
-  // gTextArea _Ylabel{ 10, 60, 300, 170 }; // define a 300px wide and 170px high description area
-  // //Ahora necesitamos separar las lineas escala.
-  //
-  //
-  // //Hace falta de corregir del grid en X y en Y, en el resto está correcto.
-  // for(int h=StartY;h<=HeigthScreen-_YOffset;h++){
-  //   if((h%Escale)==0)_tft->drawFastHLine(StartX, h, WithScreen, ILI9341_GREEN);
-  //     // Serial.println(h);
-  // }
-  //
-  //
-  //
-  // //Lo mismo para vertical
-  //
-  //
-  // for(int h=StartX;h<=WithScreen;h++){
-  //   if((h%Escale)==0)_tft->drawFastVLine(h, StartY, (HeigthScreen-StartY), ILI9341_GREEN);
-  //     // Serial.println(h);
-  // }
+              En X total de 290 pixeles
+              En Y total de 190 pixeles
+
+  Cuadrado desde (0,210)->(320,240), que es el del x label
+
+              En X total de 320 pixeles
+              En Y total de 30 pixeles
+
+  Cuadrado desde (0,20)->(30,240), que es el del y label
+
+              En Y total de 30 pixeles
+              En X total de 220 pixeles
+
+    *///
+
+  //Como el último pixel no lo dibuja hacemos un grid de 5 de desplazamiento.
 
 
 
+  for(int h=35;h<=WideScreen-5;h++){
+    if(((h-5)%Escale)==0){
+      _tft->drawFastVLine(h, 20, HeigthScreen-30-20-5-5, ILI9341_GREEN); //x,y,h,color
+      Serial.print("#");
+      Serial.println(h);
+  }
+  Serial.println(h);
 
-_tft->setTextArea(_GridArea);
-_tft->setTextColor(ILI9341_WHITE,ILI9341_BLACK);
-// _tft->clearTextArea(ILI9341_BLACK);
+  }
 
-//Texto mostrado correctamente abajo
-_tft->printAlignedOffseted(Xlabel, gTextAlignBottomLeft , 0, 0);
-//_tft->print(Xlabel);
 
-  // _tft->printAlignedOffseted(("Reflow Oven T-962 -- V " + (String)Version), gTextAlignBottomCenter, 0, -50);
+  for(int h=20;h<=HeigthScreen-30;h++){
+    if(((h-0)%Escale)==0)_tft->drawFastHLine(40+5, h, WideScreen-40-5-5-5-5, ILI9341_GREEN);
+      // Serial.println(h);
+  }
+
+
+  //Ahora los labels y los numeros del grid inferiores.
+
+  _tft->setTextArea(_GridArea);
+  _tft->setTextColor(ILI9341_WHITE,ILI9341_BLACK);
+  // _tft->clearTextArea(ILI9341_BLACK);
+
+  //Texto mostrado correctamente abajo, parte inferior
+  //Ahora imprimo los numeros
+  int _auxPos=15;
+  for (int h=0;h<=13;h++){
+    _tft->printAlignedOffseted((String)h,gTextAlignBottomLeft,_auxPos,5);
+    _auxPos=_auxPos+20;
+
+  }
+
+  _tft->printAlignedOffseted("Minutos", gTextAlignBottomLeft , 0, 28);
+  // _tft->printAlignedOffseted("Time:",gTextAlignBottomLeft,80,28);
+  //Ahora toca imprimir eje Y
+
+  _tft->setTextArea(_Ylabel);
+  _auxPos=0;
+  int _Celsius=252;
+  for (int h=1;h<10;h++){
+    _tft->printAt((String)_Celsius,18,_auxPos);
+    _auxPos=_auxPos+20;
+    _Celsius=_Celsius-30;
+
+  }
+
+  _tft->printAt("C",12,180);
+
+  _tft->drawFastHLine(5,180+20,5,ILI9341_WHITE);
+  _tft->drawFastHLine(5,181+20,5,ILI9341_WHITE);
+  _tft->drawFastHLine(5,183+20,5,ILI9341_WHITE);
+
+
+
+
 }

@@ -30,6 +30,9 @@ public:
    void Menu();
    void EncoderRead();
    void InterrupcionBoton();
+   int UpdateState(int _StateNow);
+
+
 
 private:
 

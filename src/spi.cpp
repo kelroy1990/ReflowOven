@@ -26,6 +26,7 @@
 
 Pantalla* Screen;
 
+int _State=0;
 
 
 void _SwitchPressed(){
@@ -47,14 +48,21 @@ void setup()
    //Screen.StartSD();    //carga la SD.
    Screen->StartScreen();
    Screen->InitialMenu();
-   delay(1000);
-   Screen->Menu();
 
-      Screen->EncoderRead();
+   delay(1000);
+  //  Screen->Menu();
+
+      // Screen->EncoderRead();
 }
 
 void loop()
 {
    /* add main program code here */
+
+   if(_State==0){
+     Screen->UpdateState(0);
+
+
+   }
 
 }
