@@ -9,6 +9,7 @@
 #include <ILI9341_due_config.h>
 #include <touchcalibration.h>
 #include <Utilities.h>
+#include <KY-040.h>
 
 
 //Settings
@@ -27,8 +28,8 @@ public:
    void StartScreen();
    void StartSD();
    void Menu();
-
-
+   void EncoderRead();
+   void InterrupcionBoton();
 
 private:
 
@@ -44,6 +45,7 @@ protected:
    SdFat            sd;
    SdFile           myFile;
    TouchCalibration CalibrateTouch = TouchCalibration(&tft);
+   Encoder _Encoder;
 
    //Utilidades y funciones
    Utilities _Utilities;

@@ -19,3 +19,7 @@
    //LA PANTALLA ES DE 320x240 px
 #define WithScreen 320
 #define HeigthScreen 240
+//Encoder
+#define EncoderPinA 52
+#define EncoderPinB 53
+#define EncoderSwPin 50

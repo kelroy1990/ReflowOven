@@ -44,6 +44,7 @@ void Utilities::PrintGrid(int StartX, int StartY, int FinishX, int FinishY, int 
 
   //Lo mismo para vertical
 
+
   for(int h=StartX;h<=WithScreen;h++){
     if((h%Escale)==0)_tft->drawFastVLine(h, StartY, (HeigthScreen-StartY), ILI9341_GREEN);
       // Serial.println(h);

@@ -11,7 +11,19 @@ Pantalla::Pantalla()
 {
    //Constructor, paso objetos de construccion a Utilities
 
+
 }
+
+///////////////////////////////////Grupo interrupcion////////////////////
+
+void Pantalla::InterrupcionBoton()
+{
+  _Encoder.SetSwitchStop();
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+
 
 void Pantalla::ClearScreen(uint16_t Color){
   //limpieza de pantalla para salto al siguiente menu.
@@ -114,6 +126,14 @@ void Pantalla::Menu()
 
 
     _Utilities.PrintGrid(0, 20, 320, 240, 20,"Segundos","Grados");
+  _Encoder.SetZero();
+
+}
+
+void Pantalla::EncoderRead(){
+
+  _Encoder.GetPosition();
+  // _Encoder.GetSwPosition();
 
 }
 

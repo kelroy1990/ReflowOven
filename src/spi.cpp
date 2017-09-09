@@ -22,22 +22,39 @@
 #include <Pantalla.h>
 #include <Settings.h>
 //#include <menu.h>
+#include <KY-040.h>
 
-Pantalla Screen;
+Pantalla* Screen;
+
+
+
+void _SwitchPressed(){
+  Screen->InterrupcionBoton();
+}
+
+
+
+
 void setup()
 {
+  pinMode(EncoderSwPin, INPUT);
+  attachInterrupt(EncoderSwPin,_SwitchPressed,FALLING);
+  Screen= new Pantalla();//Instancio el objeto
    // #ifdef _Serial
    Serial.begin(115200);
    Serial.println("Iniciando programa Reflow Oven...");
    //#endif
    //Screen.StartSD();    //carga la SD.
-   Screen.StartScreen();
-   Screen.InitialMenu();
+   Screen->StartScreen();
+   Screen->InitialMenu();
    delay(1000);
-   Screen.Menu();
+   Screen->Menu();
+
+      Screen->EncoderRead();
 }
 
 void loop()
 {
    /* add main program code here */
+
 }
