@@ -13,22 +13,42 @@ TouchCalibration::TouchCalibration(ILI9341_due *tft)
 void TouchCalibration::CalibrateRutine()
 {
    startup();
-   drawCrossHair(10, 10, ILI9341_WHITE);
-   delay(200);   //esto es para que no lea la medida anterior.
-   readCoordinates();
    //Ahora tendremos las cordenadas 10-10, pero en forma X_Y dada por el touch, el cual es más grande por lo tanto está desplazado.
    //Tambien con esto sabemos el X min, para llamar a la función map. Mas fácil, así como la Y minima.
-   delay(200);
    //320 pixeles que tiene de ancho, entre dos para obtener la mitad, más el offset inicial.
+
+   delay(1000);//Primera espera para mostar
+   drawCrossHair(10, 10, ILI9341_WHITE);
+   readCoordinates(1);
    _ILI9341->setTextColor(ILI9341_WHITE, ILI9341_RED);
-   _ILI9341->printAligned("RELEASE", gTextAlignMiddleCenter);
-   waitForTouch();
-   drawCrossHair(10, 10, ILI9341_DARKGRAY);
+   _ILI9341->printAligned("RELEASE", gTextAlignMiddleCenter,10,10);
+   drawCrossHair(10, 10, ILI9341_RED);
+   delay(1000);
 
-   //zona dos.
-   drawCrossHair((320 / 2), 10, ILI9341_WHITE);
+   drawCrossHair(310, 10, ILI9341_DARKGRAY);
+   readCoordinates(2);
+   _ILI9341->setTextColor(ILI9341_WHITE, ILI9341_RED);
+   _ILI9341->printAligned("RELEASE", gTextAlignMiddleCenter,10,10);
+   drawCrossHair(310, 10, ILI9341_RED);
+   delay(1000);
 
-   readCoordinates();
+   drawCrossHair(10, 230, ILI9341_DARKGRAY);
+   readCoordinates(3);
+   _ILI9341->setTextColor(ILI9341_WHITE, ILI9341_RED);
+   _ILI9341->printAligned("RELEASE", gTextAlignMiddleCenter,10,10);
+   drawCrossHair(10, 230, ILI9341_RED);
+   delay(1000);
+
+   drawCrossHair(310, 230, ILI9341_DARKGRAY);
+   readCoordinates(4);
+   _ILI9341->setTextColor(ILI9341_WHITE, ILI9341_RED);
+   _ILI9341->printAligned("RELEASE", gTextAlignMiddleCenter,10,10);
+   drawCrossHair(310, 230, ILI9341_RED);
+   delay(1000);
+   ///Repetir el proceso 4 veces.
+
+  _ILI9341->printAligned("CALIBRATED", gTextAlignMiddleCenter,10,10);
+  waitForTouch();
 }
 
 void TouchCalibration::waitForTouch()
@@ -57,7 +77,7 @@ void TouchCalibration::drawCrossHair(int x, int y, uint16_t color)
    _ILI9341->drawLine(x, y - 5, x, y + 5, color);
 }
 
-void TouchCalibration::readCoordinates()
+void TouchCalibration::readCoordinates(int Point)
 {
    boolean OK = false;
 
@@ -85,12 +105,12 @@ void TouchCalibration::readCoordinates()
                 //leemos el dato.
                 X += p.x;
                 Y += p.y;
-                Serial.print("X = ");
-                Serial.print(p.x);
-                Serial.print("\tY = ");
-                Serial.print(p.y);
-                Serial.print("\tPressure = ");
-                Serial.println(p.z);
+                // Serial.print("X = ");
+                // Serial.print(p.x);
+                // Serial.print("\tY = ");
+                // Serial.print(p.y);
+                // Serial.print("\tPressure = ");
+                // Serial.println(p.z);
                 h++;
                 }
              } //Final bucle for
@@ -104,12 +124,31 @@ void TouchCalibration::readCoordinates()
          int FinalX = X / 100;
          int FinalY = Y / 100;
 
-
+         Serial.print("############# Medicion ");
+         Serial.println(Point);
          Serial.println("Valor final X:");
          Serial.println(FinalX, DEC);
          Serial.println("Valor final Y:");
          Serial.println(FinalY, DEC);
+
+
+         if(Point==1){
+           _Point1[0]=FinalX;
+           _Point1[1]=FinalY;
+         }else if(Point==2){
+           _Point2[0]=FinalX;
+           _Point2[1]=FinalY;
+         }else if(Point==3){
+           _Point3[0]=FinalX;
+           _Point3[1]=FinalY;
+         }else if(Point==4){
+           _Point4[0]=FinalX;
+           _Point4[1]=FinalY;
+         }
+
          } //final while OK.
+
+
 }
 
 void TouchCalibration::startup()

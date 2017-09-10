@@ -71,6 +71,7 @@ int Pantalla::UpdateState(int _StateNow){
  // pressure of 0 means no pressing!
  if(_StateNow==0){
 
+
    if (p.z > ts.pressureThreshhold) {
 
      Serial.print("X = "); Serial.print(p.x);
@@ -89,16 +90,21 @@ int Pantalla::UpdateState(int _StateNow){
            Serial.println("Pulsado Start");
          }
        } //Fin caso touch calibrate button
-
+     }
+   }
+else if (_StateNow==1){
+  Serial.println("estado 1");
+CalibrateTouch.CalibrateRutine();
+}
 
 
 
 
    }
 
- }
 
- }
+
+ 
 
 
 void Pantalla::Menu()

@@ -15,7 +15,7 @@ public:
 
    void CalibrateRutine();
    void SetUpScreenObject(ILI9341_due *tft);
-   void readCoordinates();
+   void readCoordinates(int Point);
    void drawCrossHair(int x,
                       int y,
                       uint16_t color);
@@ -29,6 +29,9 @@ private:
    void waitForTouch();
    void toHex();
    void drawButtons();
+
+   int _Point1[1],_Point2[1],_Point3[1],_Point4[1];
+
 
 protected:
 
